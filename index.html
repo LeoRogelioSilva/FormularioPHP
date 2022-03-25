@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário</title>
+    <!--<link rel="stylesheet" href="style.css">-->
+    <style>
+
+    </style>
+</head>
+<!--background="src/bgimage.jpg"-->
+<body >
+
+    <div class="header_div">
+        <br>
+
+        <h1>Olá </h1>
+
+        <div class="dropdown">
+            <span>Mouse over me</span>
+            <div class="dropdown-content">
+                <p>Hello World!</p>
+            </div>
+        </div>
+
+        <div class="form_content">
+            <div class="form">
+                <form action="config.php" method="POST">
+                </form>
+                <form id="panel" class="window" method="post" name="fCadastro" onsubmit="return validar()">
+                    <div class="title-bar">
+                        <h2>Cadastro</h2>
+                    </div>
+            
+                    <br>
+                    <label>Nome Completo:
+                        <br>
+                        <input type="text" name="nome" class="entrada" placeholder="Insira Seu Nome"></label>
+                    <br><br>
+            
+                    <label>E-Mail
+                        <br>
+                        <input type="email" name="email" placeholder="exemplo@email.com"></label>
+            
+                    <br><br>
+                    <label>Celular:
+                        <br>
+                        <input type="number" name="celular" placeholder="(xx)xxxxx-xxxx" ></label>
+                    <br><br>
+            
+                    <label>CEP:
+                        <br>
+                        <input type="number" name="cep" placeholder="000000-000" ></label>
+                    <br><br>
+            
+                 
+            
+                    <input type="submit" value="Cadastrar" name="acao">
+                    <a href="../Conta/login.php" style="float: right;">Retornar ao Login</a>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
