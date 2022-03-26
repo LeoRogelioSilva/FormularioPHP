@@ -1,5 +1,84 @@
 <?php
 
+use function PHPSTORM_META\type;
+
+$nome = $celular = $email = $cep = $rua = $numero = $bairro = $cidade = $uf = $id = "";
+$noData = 0;
+$go = 0;
+
+
+
+
+if ($go == 1 && isset($_POST['acao'])) {
+    $pdo = acessarBanco();
+    $nome = $_POST['nome'];
+    echo $nome;
+
+    $celular = $_POST['celular'];
+
+    $email = $_POST['email'];
+
+    $cep = $_POST['cep'];
+
+    $rua = $_POST['rua'];
+
+    $numero = $_POST['numero'];
+
+    $bairro = $_POST['bairro'];
+
+    $cidade = $_POST['cidade'];
+
+    $uf = $_POST['uf'];
+    echo $uf;
+    
+    try {
+        $statement = $pdo->prepare('INSERT INTO userdata VALUES (:nome, :celular, :email, :cep, :rua, :numero, :bairro, :cidade, :uf, :id)');
+        $statement->execute([
+            'nome' => $nome,
+            'celular' => $celular,
+            'email' => $email,
+            'cep' => $cep,
+            'rua' => $rua,
+            'numero' => $numero,
+            'bairro' => $bairro,
+            'cidade' => $cidade,
+            'uf' => $uf,
+            'id' => $id
+        ]);
+        echo "cadastrado com sucesso;";
+    } catch (Exception $e) {
+        echo "<p> errooo </p>";
+        echo $e;
+    }
+
+    $go = 0;
+} else {
+    echo "";
+}
+
+
+function acessarBanco()
+{
+    $ini = parse_ini_file('database.ini');
+    $sname = $ini['host'];
+    $dbname = $ini['dbName'];
+    $uname = $ini['username'];
+    $pwd = $ini['password'];
+    
+
+    try {
+        $conn = new PDO("mysql:host=$sname;", $uname, $pwd);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->exec("USE $dbname;");
+    } catch (PDOException $e) {
+        echo 'Erro ao conectar ao banco de dados<br/>';
+        echo $e;
+        exit;
+    }
+    return $conn;
+}
+
+
 function get_endereco($cep)
 {
 
@@ -37,21 +116,20 @@ function get_endereco($cep)
         <br>
 
         <h1>Olá </h1>
-
+    </div>
+    <div class="container">
 
         <div class="form_content">
             <div class="form">
-                <form action="setData.php" method="POST">
-                </form>
-                <form id="panel" class="window" method="post" name="fCadastro" onsubmit="return validar()">
-                    <div class="title-bar">
+                <form id="panel" class="window" method="POST" name="fCadastro" action="index.php">
+                    <div class=" title-bar">
                         <h2>Cadastro</h2>
                     </div>
 
                     <br>
                     <label>Nome Completo:
                         <br>
-                        <input type="text" required="required" name="nome" class="entrada" placeholder="Insira Seu Nome" value="<?php if ($_POST['nome']) {
+                        <input type="text" required="required" name="nome" class="entrada" placeholder="Insira Seu Nome" value="<?php if (!empty($_POST['nome'])) {
                                                                                                                                     echo $_POST['nome'];
                                                                                                                                 } else {
                                                                                                                                     echo "";
@@ -60,7 +138,7 @@ function get_endereco($cep)
 
                     <label>E-Mail
                         <br>
-                        <input type="email" required="required" name="email" placeholder="exemplo@email.com" value="<?php if ($_POST['email']) {
+                        <input type="email" required="required" name="email" placeholder="exemplo@email.com" value="<?php if (!empty($_POST['email'])) {
                                                                                                                         echo $_POST['email'];
                                                                                                                     } else {
                                                                                                                         echo "";
@@ -69,13 +147,12 @@ function get_endereco($cep)
                     <br><br>
                     <label>Celular:
                         <br>
-                        <input type="text" required="required" name="celular" placeholder="(xx)xxxxx-xxxx" value="<?php if ($_POST['celular']) {
+                        <input type="text" required="required" name="celular" placeholder="(xx)xxxxx-xxxx" value="<?php if (!empty($_POST['celular'])) {
                                                                                                                         echo $_POST['celular'];
                                                                                                                     } else {
                                                                                                                         echo "";
                                                                                                                     } ?>"></label>
                     <br><br>
-
                     <label>Consulta CEP:
                         <br>
                         <input type="number" name="cep" id="cep" placeholder="000000-000" value="<?php if ($endereco->cep) {
@@ -83,39 +160,39 @@ function get_endereco($cep)
                                                                                                     } else {
                                                                                                         echo "";
                                                                                                     } ?>"></label>
-                    <button type="submit" > Pesquisar Endereço </button>
+                    <button type="submit"> Pesquisar Endereço </button>
                     <br><br>
-                    <?php if ($_POST['cep']) { ?>
+                    <?php if (!empty($_POST['cep'])) { ?>
                         <p>
                             <?php $endereco = get_endereco($_POST['cep']); ?>
                             <label>CEP:
                                 <br>
-                                <input type="text" required="required" readonly="readonly" value="<?php echo $endereco->cep; ?>">
+                                <input type="text" name="cep" required="required" readonly="readonly" value="<?php echo $endereco->cep; ?>">
                             </label>
                             <br><br>
                             <label>Logradouro:
                                 <br>
-                                <input type="text" id="rua" required="required" readonly="readonly" value="<?php echo $endereco->logradouro; ?>">
+                                <input type="text" id="rua" name="rua" required="required"  value="<?php echo $endereco->logradouro; ?>">
                                 <br><br>
                             </label>
                             <label>Numero:
                                 <br>
-                                <input type="number_format" id="numero" required="required" placeholder="000">
+                                <input type="number_format" id="numero" name="numero" required="required" placeholder="000">
                                 <br><br>
                             </label>
                             <label>Bairro:
                                 <br>
-                                <input type="text" id="bairro" required="required" readonly="readonly" value="<?php echo $endereco->bairro; ?>">
+                                <input type="text" id="bairro" name="bairro" required="required" value="<?php echo $endereco->bairro; ?>">
                                 <br><br>
                             </label>
                             <label>Cidade:
                                 <br>
-                                <input type="text" id="cidade" required="required" readonly="readonly" value="<?php echo $endereco->localidade; ?>">
+                                <input type="text" id="cidade" name="cidade" required="required"  value="<?php echo $endereco->localidade; ?>">
                                 <br><br>
                             </label>
                             <label>UF:
                                 <br>
-                                <input type="text" id="UF" required="required" readonly="readonly" value="<?php echo $endereco->uf; ?>">
+                                <input type="text" id="UF" name="uf" required="required"     value="<?php echo $endereco->uf; ?>">
                                 <br><br>
                             </label>
                             <label>
@@ -130,7 +207,7 @@ function get_endereco($cep)
                             </script>
 
 
-                            <input type="submit" value="Cadastrar" id="enviar" style="display: none;">
+                            <input type="submit" value="Cadastrar" id="enviar" name="acao" style="display: none;" <?php $go = 1 ?>>
 
                         </p>
                     <?php } ?>
