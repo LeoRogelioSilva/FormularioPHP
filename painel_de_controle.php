@@ -1,4 +1,5 @@
 <?php
+include "valida_sessao.php";
 
 use function PHPSTORM_META\type;
 
@@ -50,7 +51,7 @@ function acessarBanco()
             <h1>
                 Painel de Controle
             </h1>
-
+            <a href="logout.php">Logout</a>
         </header>
     </div>
     <div class="container">

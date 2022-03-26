@@ -1,8 +1,9 @@
 <?php
+session_start();
+if((!isset ($_SESSION['email']) == true) and (!isset ($_SESSION['senha']) == true))
+{
+  header('location:login.php');
+  }
 
-
-if (!isset($_SESSION["login"]) || !($_SESSION["login"] == true)) {
-    header("location: login.php");
-    exit;
-}
+$logado = $_SESSION['email'];
 ?>

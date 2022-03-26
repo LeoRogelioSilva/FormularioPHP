@@ -1,38 +1,31 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "bdform");
 
-if ($mysqli->connect_errno) {
-    die("Database error: " . $mysqli->connect_error);
-}
+if (isset($_POST['email'])) {
+    $email = $_POST['email'];
+    if (isset($_POST['senha'])) {
+        $senha = md5($_POST['senha']);
 
-$email = $_POST['email'];
-$senha = $_POST['senha'];
-
-$conexao = new mysqli("localhost", "root", "", "bdform");
-
-$query = ("select * from userdata where email='$email'");
-$resultado = mysqli_query($conexao, $query);
-$linhas = mysqli_num_rows($resultado);
-if ($linhas == 0) {
-    echo "Usuário não encontrado!";
-    echo "<button type='submit' action='index.php'>Voltar</button>";
-} else {
-    //$res_senha=" ";
-    while ($row = mysqli_fetch_array($resultado)) {
-        $emailu = $row['email'];
-        $senhau = $row['senha'];
-    }
-    if ($senha != $senhau) {
-        echo "<h1><center>Senha está incorreta!</center><br><h1>";
-        echo "<center><a href='login.php'>Voltar</a></center>";
-    } else {
-        session_start();
-        $_SESSION["email"] = $email;
-        $_SESSION["senha"] = $senha;
-        header("Location: painel_de_controle.php");
+        $conexao = mysqli_connect("localhost", "root", "", "bdform");
+        if (mysqli_connect_errno($conexao)) {
+            echo "Problemas na Conexão Erro:";
+            echo mysqli_connect_errno();
+            die();
+        }
+        $query = ("select * from useradmin where email='$email' and senha='$senha'");
+        $resultado = mysqli_query($conexao, $query);
+        $linhas = mysqli_num_rows($resultado);
+        if ($linhas == 0) {
+            echo "Usuário não encontrado!";
+            unset($_SESSION['email']);
+        } else {
+            session_start();
+            $_SESSION["email"] = $email;
+            $_SESSION["senha"] = $senha;
+            header("Location: painel_de_controle.php");
+        }
+        mysqli_close($conexao);
     }
 }
-
 ?>
 
 
@@ -45,9 +38,8 @@ if ($linhas == 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <!--<link rel="stylesheet" href="style.css">-->
-    <style>
-
-    </style>
+    <script>
+    </script>
 
 </head>
 <!--background="src/bgimage.jpg"-->
@@ -57,7 +49,7 @@ if ($linhas == 0) {
     <div class="header_div">
         <br>
 
-        <h1>Olá </h1>
+        <h1>Olá Admin!</h1>
 
 
         <div class="form_content">
