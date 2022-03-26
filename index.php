@@ -8,10 +8,9 @@ $noData = 0;
 
 
 
-if ( isset($_POST['acao'])) {
+if (isset($_POST['acao'])) {
     $pdo = acessarBanco();
     $nome = $_POST['nome'];
-    echo $nome;
 
     $celular = $_POST['celular'];
 
@@ -28,8 +27,7 @@ if ( isset($_POST['acao'])) {
     $cidade = $_POST['cidade'];
 
     $uf = $_POST['uf'];
-    echo $uf;
-    
+
     try {
         $statement = $pdo->prepare('INSERT INTO userdata VALUES (:nome, :celular, :email, :cep, :rua, :numero, :bairro, :cidade, :uf, :id)');
         $statement->execute([
@@ -44,7 +42,6 @@ if ( isset($_POST['acao'])) {
             'uf' => $uf,
             'id' => $id
         ]);
-        echo "cadastrado com sucesso;";
     } catch (Exception $e) {
         echo "<p> errooo </p>";
         echo $e;
@@ -63,15 +60,32 @@ function acessarBanco()
     $dbname = $ini['dbName'];
     $uname = $ini['username'];
     $pwd = $ini['password'];
-    
+
 
     try {
         $conn = new PDO("mysql:host=$sname;", $uname, $pwd);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->exec("USE $dbname;");
     } catch (PDOException $e) {
-        echo 'Erro ao conectar ao banco de dados<br/>';
-        echo $e;
+
+        $detalhes_pdo = "mysql:host=$sname;";
+        try {
+            $conexao_pdo = new PDO($detalhes_pdo, $uname, $pwd);
+        } catch (PDOException $e) {
+            print "Erro: " . $e->getMessage() . "<br/>";
+            die();
+        }
+
+        $bd = "bdform";
+        $verifica = $conexao_pdo->exec(
+            "CREATE DATABASE IF NOT EXISTS $bd;
+    GRANT ALL ON $bd.* TO 'root'@'localhost';
+    FLUSH PRIVILEGES;"
+        );
+        if ($verifica) {
+        } else {
+            echo 'Falha ao criar banco de dados!';
+        }
         exit;
     }
     return $conn;
@@ -86,7 +100,11 @@ function get_endereco($cep)
     $cep = preg_replace("/[^0-9]/", "", $cep);
     $url = "http://viacep.com.br/ws/$cep/xml/";
 
-    $xml = simplexml_load_file($url);
+    try{ 
+        $xml = simplexml_load_file($url);
+    } catch(Exception $e){
+        echo $e;
+    }
     return $xml;
 }
 
@@ -102,24 +120,39 @@ function get_endereco($cep)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário</title>
     <link rel="stylesheet" href="style.css">
-    <style>
 
-    </style>
+    <script>
+        function liberar_envio() {
+            document.getElementById("enviar").style.display = "inline";
 
+        };
+    </script>
 </head>
 
 <body>
 
     <div class="header_div">
-        <br>
-        <h1>Olá </h1>
-        <a href="login.php">Login</a>
+
+        <article>
+            <header>
+                <br>
+                <div style="text-align: left;">
+                    <h1>Olá </h1>
+                </div>
+
+                <div>
+                    <h1><a href="login.php">Login</a></h1>
+                </div>
+            </header>
+        </article>
+
+
     </div>
-    <div class="container">
+    <div class="container" style="text-align: center;">
 
         <div class="form_content">
             <div class="form">
-                <form id="panel" class="window" method="POST" name="fCadastro" action="index.php">
+                <form id="panel" class="window" method="POST" name="fCadastro" action="index.php" style="align-items: center;">
                     <div class=" title-bar">
                         <h2>Cadastro</h2>
                     </div>
@@ -170,7 +203,7 @@ function get_endereco($cep)
                             <br><br>
                             <label>Logradouro:
                                 <br>
-                                <input type="text" id="rua" name="rua" required="required"  value="<?php echo $endereco->logradouro; ?>">
+                                <input type="text" id="rua" name="rua" required="required" value="<?php echo $endereco->logradouro; ?>">
                                 <br><br>
                             </label>
                             <label>Numero:
@@ -185,27 +218,26 @@ function get_endereco($cep)
                             </label>
                             <label>Cidade:
                                 <br>
-                                <input type="text" id="cidade" name="cidade" required="required"  value="<?php echo $endereco->localidade; ?>">
+                                <input type="text" id="cidade" name="cidade" required="required" value="<?php echo $endereco->localidade; ?>">
                                 <br><br>
                             </label>
                             <label>UF:
                                 <br>
-                                <input type="text" id="UF" name="uf" required="required"     value="<?php echo $endereco->uf; ?>">
+                                <input type="text" id="UF" name="uf" required="required" value="<?php echo $endereco->uf; ?>">
                                 <br><br>
                             </label>
+
                             <label>
                                 <input type="checkbox" id="termo" onclick="liberar_envio()"> Eu aceito os temos e condições de uso.
-                                <br>
+
                             </label>
-                            <script>
-                                function liberar_envio() {
-                                    document.getElementById("enviar").style.display = "block";
+                            <label style="text-align: center;">
+                                <p style="text-align: center;">
+                                    <input type="submit" value="Cadastrar" id="enviar" name="acao" style="text-align: center; display:none" <?php $go = 1 ?>>
 
-                                };
-                            </script>
+                                </p>
+                            </label>
 
-
-                            <input type="submit" value="Cadastrar" id="enviar" name="acao" style="display: none;" <?php $go = 1 ?>>
 
                         </p>
                     <?php } ?>
@@ -215,6 +247,11 @@ function get_endereco($cep)
             </div>
         </div>
 
+    </div>
+    <div>
+        <footer style="background-color: black; height: 100px;">
+            Contato:
+        </footer>
     </div>
 
 </body>

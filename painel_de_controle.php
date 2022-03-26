@@ -17,8 +17,26 @@ function acessarBanco()
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->exec("USE $dbname;");
     } catch (PDOException $e) {
-        echo 'Erro ao conectar ao banco de dados<br/>';
-        echo $e;
+
+        $detalhes_pdo = "mysql:host=$sname;";
+        try {
+            $conexao_pdo = new PDO($detalhes_pdo, $uname, $pwd);
+        } catch (PDOException $e) {
+            print "Erro: " . $e->getMessage() . "<br/>";
+            die();
+        } 
+
+        $bd = "bdform";
+        $verifica = $conexao_pdo->exec(
+            "CREATE DATABASE IF NOT EXISTS '$bd';
+    GRANT ALL ON '$bd'.* TO 'root'@'localhost';
+    FLUSH PRIVILEGES;"
+        );
+        if ($verifica) {
+            echo 'Banco de dados criado com sucesso!';
+        } else {
+            echo 'Falha ao criar banco de dados!';
+        }
         exit;
     }
     return $conn;
