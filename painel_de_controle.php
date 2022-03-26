@@ -127,21 +127,22 @@ function acessarBanco()
             <br>
             <br>
 
-            <form action="painel_de_controle.php">
+            <form action="painel_de_controle.php" method="POST">
                 <label>
                     Buscar por:
                 </label>
-                <select name="busca" id="busca" onchange="liberar_envio()">
-                    <option value="id">ID</option>
-                    <option value="nome">NOME</option>
-                    <option value="celular">CELULAR</option>
-                    <option value="email">EMAIL</option>
-                    <option value="rua">RUA</option>
-                    <option value="bairro">BAIRRO</option>
-                    <option value="cidade">CIDADE</option>
-                    <option value="uf">UF</option>
-                    <option value="cep">CEP</option>
-                </select>
+                <label>
+                    <select name="busca" id="busca" onchange="liberar_envio()">
+                        <option value="id"> - </option>
+                        <option value="id">ID</option>
+                        <option value="nome">NOME</option>
+                        <option value="celular">CELULAR</option>
+                        <option value="email">EMAIL</option>
+                        <option value="cidade">CIDADE</option>
+                        <option value="uf">UF</option>
+                        <option value="cep">CEP</option>
+                    </select>
+                </label>
                 <script>
                     function liberar_envio() {
                         document.getElementById("input").style.display = "block";
@@ -149,84 +150,113 @@ function acessarBanco()
                     };
                 </script>
                 <br>
-                Buscar: <input type="text" name="" id="input" style="display: none;">
+                <label>
+                    Buscar: <input type="text" name="input" id="input" style="display: none;">
+                </label>
+                <br>
                 <input type="submit" value="enviar" id="submit" name="acao">
 
 
             </form>
         </div>
-        <?php if(isset($_POST['acao'])){
-        ?>
-        <div class="tabela">
-            <table>
-                <tr>
-                    <td>
-                        ID
-                    </td>
-                    <td>
-                        NOME
-                    </td>
-                    <td>
-                        CELULAR
-                    </td>
-                    <td>
-                        EMAIL
-                    </td>
-                    <td>
-                        CEP
-                    </td>
-                    <td>
-                        LOGRADOURO
-                    </td>
-                    <td>
-                        NUMERO
-                    </td>
-                    <td>
-                        BAIRRO
-                    </td>
-                    <td>
-                        CIDADE
-                    </td>
-                    <td>
-                        UF
-                    </td>
-                </tr>
-                <hr>
-                <tr>
-                    <td colspan="9">
-                        <hr>
-                    </td>
-                </tr>
-                <?php
-                $pdo = acessarBanco();
+        <?php if (isset($_POST['acao'])) {
+            $busca = $_POST['busca'];
+            if (isset($_POST['input'])) {
+                $input = $_POST['input'];
+            }
 
-                try {
-                    $statement = $pdo->prepare('SELECT * FROM userdata');
-                    $statement->execute([]);
-                    $resultado = $statement->fetchAll(PDO::FETCH_ASSOC);
-                    foreach ($resultado as $item) {
-                        echo "<tr>";
-                        echo "<td> ";
-                        echo $item['id'];
-                        echo "</td>";
-                        foreach ($item as $campo) {
-                            if ($item['id'] == $campo) {
+        ?>
+            <div class="tabela">
+                <table>
+                    <tr>
+                        <td>
+                            ID
+                        </td>
+                        <td>
+                            NOME
+                        </td>
+                        <td>
+                            CELULAR
+                        </td>
+                        <td>
+                            EMAIL
+                        </td>
+                        <td>
+                            CEP
+                        </td>
+                        <td>
+                            LOGRADOURO
+                        </td>
+                        <td>
+                            BAIRRO
+                        </td>
+                        <td>
+                            CIDADE
+                        </td>
+                        <td>
+                            UF
+                        </td>
+                    </tr>
+                    <hr>
+                    <tr>
+                        <td colspan="9">
+                            <hr>
+                        </td>
+                    </tr>
+                    <?php
+                    $pdo = acessarBanco();
+
+                    try {
+                        switch ($busca) {
+                            case 'id':
+                                $statement = $pdo->prepare('SELECT * FROM userdata WHERE id = :input');
                                 break;
-                            }
-                            echo "<td>$campo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+                            case "nome":
+                                $statement = $pdo->prepare('SELECT * FROM userdata WHERE nome = :input');
+                                break;
+                            case "email":
+                                $statement = $pdo->prepare('SELECT * FROM userdata WHERE email = :input');
+                                break;
+                            case "celular":
+                                $statement = $pdo->prepare('SELECT * FROM userdata WHERE celular = :input');
+                                break;
+                            case "cep":
+                                $statement = $pdo->prepare('SELECT * FROM userdata WHERE cep = :input');
+                                break;
+                            case "cidade":
+                                $statement = $pdo->prepare('SELECT * FROM userdata WHERE cidade = :input');
+                                break;
+                            case "uf":
+                                $statement = $pdo->prepare('SELECT * FROM userdata WHERE uf = :input');
+                                break;
                         }
-                        echo "</tr>";
+
+                        $statement->execute(['input' => $input]);
+                        $resultado = $statement->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($resultado as $item) {
+                            echo "<tr>";
+                            echo "<td> ";
+                            echo $item['id'];
+                            echo "</td>";
+                            foreach ($item as $campo) {
+                                if ($item['id'] == $campo) {
+                                    break;
+                                }
+                                echo "<td>$campo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+                            }
+                            echo "</tr>";
+                        }
+                        //header("Location: painel_de_controle.php");
+                    } catch (Exception $e) {
+                        echo "<p> errooo </p>";
+                        echo $e;
                     }
-                    //header("Location: painel_de_controle.php");
-                } catch (Exception $e) {
-                    echo "<p> errooo </p>";
-                    echo $e;
-                }
-                ?>
-            </table>
-        </div>
+                    ?>
+                </table>
+            </div>
         <?php
-        }?>
+        } ?>
     </div>
 </body>
+
 </html>
