@@ -92,7 +92,7 @@ function acessarBanco()
                 </tr>
                 <hr>
                 <tr>
-                    <td colspan="9">
+                    <td colspan="10">
                         <hr>
                     </td>
                 </tr>
@@ -189,6 +189,9 @@ function acessarBanco()
                             LOGRADOURO
                         </td>
                         <td>
+                            NUMERO
+                        </td>
+                        <td>
                             BAIRRO
                         </td>
                         <td>
@@ -200,7 +203,7 @@ function acessarBanco()
                     </tr>
                     <hr>
                     <tr>
-                        <td colspan="9">
+                        <td colspan="10">
                             <hr>
                         </td>
                     </tr>

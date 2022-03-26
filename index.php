@@ -4,12 +4,11 @@ use function PHPSTORM_META\type;
 
 $nome = $celular = $email = $cep = $rua = $numero = $bairro = $cidade = $uf = $id = "";
 $noData = 0;
-$go = 0;
 
 
 
 
-if ($go == 1 && isset($_POST['acao'])) {
+if ( isset($_POST['acao'])) {
     $pdo = acessarBanco();
     $nome = $_POST['nome'];
     echo $nome;
@@ -102,13 +101,12 @@ function get_endereco($cep)
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário</title>
-    <!--<link rel="stylesheet" href="style.css">-->
+    <link rel="stylesheet" href="style.css">
     <style>
 
     </style>
 
 </head>
-<!--background="src/bgimage.jpg"-->
 
 <body>
 
