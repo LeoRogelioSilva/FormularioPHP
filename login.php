@@ -5,7 +5,7 @@ if (isset($_POST['email'])) {
     if (isset($_POST['senha'])) {
         $senha = md5($_POST['senha']);
 
-        $conexao = mysqli_connect("localhost", "root", "", "bdform");
+        $conexao = mysqli_connect("sql300.epizy.com", "epiz_31397704", "Leoo1202", "epiz_31397704_bdform");
         if (mysqli_connect_errno($conexao)) {
             echo "Problemas na Conexão Erro:";
             echo mysqli_connect_errno();
@@ -36,54 +36,71 @@ if (isset($_POST['email'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
     <title>Login</title>
     <script>
     </script>
 
 </head>
-<!--background="src/bgimage.jpg"-->
 
 <body>
 
     <div class="header_div">
         <br>
-
-        <h1>Olá Admin!</h1>
-
-
-        <div class="form_content">
-            <div class="form">
-                <form id="login" class="window" method="POST" name="fCadastro" action="login.php">
-                    <div class="title-bar">
-                        <h2>Login</h2>
-                    </div>
-
-                    <br>
-                    <label>Email:</label>
-                    <label>
-                        <input type="text" id="email" name="email" placeholder="meuemail@mail.com">
-                        <br><br>
-                    </label>
-                    <label>Senha:
-                    </label>
-                    <label>
-                        <input type="password" id="senha" name="senha">
-                    </label>
-                    <br><br>
-                    <input type="submit" value="Entrar" style="align-items: center;">
-
-                </form>
-
+        <header>
+            <div class="header_div">
+                <h1>Olá Admin! </h1>
+                <h3>
+                    <a href="index.php">Página Inicial</a>
+                </h3>
             </div>
-            <div>
-                <h2>
-                    Não tem cadastro?
-                </h2>
-                <a href="cadastro_login.php"> Cadastrar </a>
-            </div>
-        </div>
-
+            <br>
+        </header>
     </div>
+
+
+
+    <div class="form_content">
+        <div class="div_form ">
+            <form id="login" class="window" method="POST" name="fCadastro" action="login.php">
+                <div class="title-bar">
+                    <h2>Login</h2>
+                </div>
+
+                <br>
+                <label>Email:</label>
+                <label>
+                    <input type="text" id="email" name="email" placeholder="meuemail@mail.com">
+                    <br><br>
+                </label>
+                <label>Senha:
+                </label>
+                <label>
+                    <input type="password" id="senha" name="senha">
+                </label>
+                <br><br>
+                <input type="submit" value="Entrar" style="align-items: center;">
+
+            </form>
+
+        </div>
+        <div>
+            <h2>
+                Não tem cadastro?
+            </h2>
+            <a href="cadastro_login.php"> Cadastrar </a>
+        </div>
+    </div>
+    <footer style="background-color: black; height: 100px; text-align: center;">
+        <h4 style="color:burlywood;">
+            <br>
+            Contato: <br>
+            (12) 99783-9394 <br>
+            leorogelio1202@gmail.com <br>
+        </h4>
+
+
+    </footer>
 
 </body>
 

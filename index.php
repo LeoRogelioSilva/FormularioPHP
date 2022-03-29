@@ -100,9 +100,9 @@ function get_endereco($cep)
     $cep = preg_replace("/[^0-9]/", "", $cep);
     $url = "http://viacep.com.br/ws/$cep/xml/";
 
-    try{ 
+    try {
         $xml = simplexml_load_file($url);
-    } catch(Exception $e){
+    } catch (Exception $e) {
         echo $e;
     }
     return $xml;
@@ -118,8 +118,8 @@ function get_endereco($cep)
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
     <title>Formulário</title>
-    <link rel="stylesheet" href="style.css">
 
     <script>
         function liberar_envio() {
@@ -132,27 +132,24 @@ function get_endereco($cep)
 <body>
 
     <div class="header_div">
-
-        <article>
-            <header>
-                <br>
-                <div style="text-align: left;">
-                    <h1>Olá </h1>
-                </div>
-
-                <div>
-                    <h1><a href="login.php">Login</a></h1>
-                </div>
-            </header>
-        </article>
-
-
+        <header>
+            <br>
+            <div class="header_div">
+                <h1>Olá </h1>
+                <h3>
+                    <a href="login.php">Login</a>
+                </h3>
+            </div>
+            <br>
+        </header>
     </div>
+
+
     <div class="container" style="text-align: center;">
 
         <div class="form_content">
-            <div class="form">
-                <form id="panel" class="window" method="POST" name="fCadastro" action="index.php" style="align-items: center;">
+            <div class="div_form ">
+                <form id="panel" class="window" method="POST" name="fCadastro" action="index.php">
                     <div class=" title-bar">
                         <h2>Cadastro</h2>
                     </div>
@@ -208,7 +205,7 @@ function get_endereco($cep)
                             </label>
                             <label>Numero:
                                 <br>
-                                <input type="number_format" id="numero" name="numero" required="required" placeholder="000">
+                                <input type="number" id="numero" name="numero" required="required" placeholder="000">
                                 <br><br>
                             </label>
                             <label>Bairro:
@@ -249,8 +246,15 @@ function get_endereco($cep)
 
     </div>
     <div>
-        <footer style="background-color: black; height: 100px;">
-            Contato:
+        <footer style="background-color: black; height: 100px; text-align: center;">
+            <h4 style="color:burlywood;">
+                <br>
+                Contato: <br>
+                (12) 99783-9394 <br>
+                leorogelio1202@gmail.com <br>
+            </h4>
+
+
         </footer>
     </div>
 

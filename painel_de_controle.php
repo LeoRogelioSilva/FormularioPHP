@@ -24,7 +24,7 @@ function acessarBanco()
         } catch (PDOException $e) {
             print "Erro: " . $e->getMessage() . "<br/>";
             die();
-        } 
+        }
 
         $bd = "bdform";
         $verifica = $conexao_pdo->exec(
@@ -52,97 +52,68 @@ function acessarBanco()
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
     <title>Painel de Controle</title>
     <style>
         table,
+        td,
         th {
             border: 1px solid;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        input[type=text] {
+            width: 130px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('searchicon.png');
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        .container {
+            text-align: center;
+            align-items: center;
+            width: 80%;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        input[type=text]:focus {
+            width: 100%;
         }
     </style>
 </head>
 
 
-<body>
+<body style="background-color: #f2f2f2;">
 
-    <div>
-        <header>
-            <h1>
-                Painel de Controle
-            </h1>
-            <a href="logout.php">Logout</a>
+<div class="header_div">
+        <header style="background-color: black; height: 150px; text-align: center;">
+            <br>
+            <div class="header_div">
+                <h1 style="color:burlywood;">Painel de Controle </h1>
+                <h3>
+                    <a href="logout.php">Logout</a>
+                </h3>
+            </div>
+            <br>
         </header>
     </div>
     <div class="container">
-        <div class="tabela">
-            <table>
-                <tr>
 
-                    <td>
-                        ID
-                    </td>
-                    <td>
-                        NOME
-                    </td>
-                    <td>
-                        CELULAR
-                    </td>
-                    <td>
-                        EMAIL
-                    </td>
-                    <td>
-                        CEP
-                    </td>
-                    <td>
-                        LOGRADOURO
-                    </td>
-                    <td>
-                        NUMERO
-                    </td>
-                    <td>
-                        BAIRRO
-                    </td>
-                    <td>
-                        CIDADE
-                    </td>
-                    <td>
-                        UF
-                    </td>
-                </tr>
-                <hr>
-                <tr>
-                    <td colspan="10">
-                        <hr>
-                    </td>
-                </tr>
-                <?php
-                $pdo = acessarBanco();
 
-                try {
-                    $statement = $pdo->prepare('SELECT * FROM userdata');
-                    $statement->execute([]);
-                    $resultado = $statement->fetchAll(PDO::FETCH_ASSOC);
-                    foreach ($resultado as $item) {
-                        echo "<tr>";
-                        echo "<td> ";
-                        echo $item['id'];
-                        echo "</td>";
-                        foreach ($item as $campo) {
-                            if ($item['id'] == $campo) {
-                                break;
-                            }
-                            echo "<td>$campo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
-                        }
-                        echo "</tr>";
-                    }
-                    //header("Location: painel_de_controle.php");
-                } catch (Exception $e) {
-                    echo "<p> errooo </p>";
-                    echo $e;
-                }
-                ?>
-            </table>
-        </div>
-        <div>
+        <div style="text-align: left;">
             <br>
             <br>
 
@@ -278,7 +249,93 @@ function acessarBanco()
             </div>
         <?php
         } ?>
+        <br>
+        <hr>
+        <br>
+
+        <div class="tabela">
+            <table>
+                <tr>
+
+                    <td>
+                        ID
+                    </td>
+                    <td>
+                        NOME
+                    </td>
+                    <td>
+                        CELULAR
+                    </td>
+                    <td>
+                        EMAIL
+                    </td>
+                    <td>
+                        CEP
+                    </td>
+                    <td>
+                        LOGRADOURO
+                    </td>
+                    <td>
+                        NUMERO
+                    </td>
+                    <td>
+                        BAIRRO
+                    </td>
+                    <td>
+                        CIDADE
+                    </td>
+                    <td>
+                        UF
+                    </td>
+                </tr>
+                <hr>
+                <tr>
+                    <td colspan="10">
+                        <hr>
+                    </td>
+                </tr>
+                <?php
+                $pdo = acessarBanco();
+
+                try {
+                    $statement = $pdo->prepare('SELECT * FROM userdata');
+                    $statement->execute([]);
+                    $resultado = $statement->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($resultado as $item) {
+                        echo "<tr>";
+                        echo "<td> ";
+                        echo $item['id'];
+                        echo "</td>";
+                        foreach ($item as $campo) {
+                            if ($item['id'] == $campo) {
+                                break;
+                            }
+                            echo "<td>$campo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+                        }
+                        echo "</tr>";
+                    }
+                    //header("Location: painel_de_controle.php");
+                } catch (Exception $e) {
+                    echo "<p> errooo </p>";
+                    echo $e;
+                }
+                ?>
+            </table>
+        </div>
     </div>
+    <div>
+        <footer style="background-color: black; height: 100px; text-align: center;">
+            <h4 style="color:burlywood;">
+                <br>
+                Contato: <br>
+                (12) 99783-9394 <br>
+                leorogelio1202@gmail.com <br>
+            </h4>
+
+
+        </footer>
+    </div>
+
 </body>
 
 </html>
