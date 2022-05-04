@@ -2,17 +2,43 @@ h1 {
   color: burlywood;
 }
 
+a{
+  color: #ffca26;
+}
+
 .header_div {
   text-align: center;
   background-color: black;
   opacity: 0.6;
   height: 130px;
   text-align: center;
+  width: 100%;
+}
+
+.footer_div{
+  background-color: black;
+  opacity: 0.6;
+  height: 130px;
+  text-align: center;
+  position:relative;
+}
+
+
+
+.fill20{
+  width: 10%;
 }
 
 .form_content {
+  width: 80%;
   text-align: center;
   align-items: center;
+}
+
+.container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 form {

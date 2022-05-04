@@ -2,11 +2,10 @@
 
 use function PHPSTORM_META\type;
 
+include "acessa_bd.php";
+
 $nome = $celular = $email = $cep = $rua = $numero = $bairro = $cidade = $uf = $id = "";
 $noData = 0;
-
-
-
 
 if (isset($_POST['acao'])) {
     $pdo = acessarBanco();
@@ -53,45 +52,6 @@ if (isset($_POST['acao'])) {
 }
 
 
-function acessarBanco()
-{
-    $ini = parse_ini_file('database.ini');
-    $sname = $ini['host'];
-    $dbname = $ini['dbName'];
-    $uname = $ini['username'];
-    $pwd = $ini['password'];
-
-
-    try {
-        $conn = new PDO("mysql:host=$sname;", $uname, $pwd);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $conn->exec("USE $dbname;");
-    } catch (PDOException $e) {
-
-        $detalhes_pdo = "mysql:host=$sname;";
-        try {
-            $conexao_pdo = new PDO($detalhes_pdo, $uname, $pwd);
-        } catch (PDOException $e) {
-            print "Erro: " . $e->getMessage() . "<br/>";
-            die();
-        }
-
-        $bd = "bdform";
-        $verifica = $conexao_pdo->exec(
-            "CREATE DATABASE IF NOT EXISTS $bd;
-    GRANT ALL ON $bd.* TO 'root'@'localhost';
-    FLUSH PRIVILEGES;"
-        );
-        if ($verifica) {
-        } else {
-            echo 'Falha ao criar banco de dados!';
-        }
-        exit;
-    }
-    return $conn;
-}
-
-
 function get_endereco($cep)
 {
 
@@ -122,131 +82,174 @@ function get_endereco($cep)
     <title>Formulário</title>
 
     <script>
-        function liberar_envio() {
-            document.getElementById("enviar").style.display = "inline";
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
 
+        function liberar_envio() {
+            if (document.getElementById("termo").checked == true) {
+                document.getElementById("enviar").style.display = "inline";
+            } else {
+                document.getElementById("enviar").style.display = "none";
+            }
         };
+
+        function validateEmail() {
+            var re = /\S+@\S+\.\S+/;
+            if (!re.test(document.getElementById("email"))) {
+                alert("Email invalidod");
+            }
+        };
+
+        function gera_cpf() {
+            var number_cpf = [];
+            var soma = 0;
+            var cpf = "";
+            for (let i = 0; i < 9; i++) {
+                number_cpf[i] = getRandomInt(0, 9);
+                soma += (i + 1) * number_cpf[i];
+            }
+            number_cpf[9] = soma % 11 == 10 ? 9 : soma % 11;
+            soma = 0;
+            for (let i = 0; i <= 9; i++) {
+                soma += (i) * number_cpf[i];
+            }
+            number_cpf[10] = soma % 11 == 10 ? 9 : soma % 11;
+            for (let i = 0; i < 11; i++) {
+                cpf += String(number_cpf[i]);
+            }
+            document.getElementById("cpf_gerado").style.display = "inline";
+            document.getElementById("cpf_gerado").value = cpf;
+
+        }
     </script>
 </head>
 
 <body>
-
-    <div class="header_div">
-        <header>
-            <br>
+    <header>
+        <div class="container" style="text-align: center;">
             <div class="header_div">
+
+                <br>
                 <h1>Olá </h1>
                 <h3>
-                    <a href="login.php">Login</a>
+                    <a href="login.php" style="color:burlywood;">Login</a>
                 </h3>
+                <br>
+
             </div>
-            <br>
-        </header>
-    </div>
+    </header>
+    <center>
 
+        <div class="div_form ">
+            <form id="panel" class="window" method="POST" name="fCadastro" action="index.php">
+                <div class=" title-bar">
+                    <h2>Cadastro</h2>
+                </div>
 
-    <div class="container" style="text-align: center;">
-
-        <div class="form_content">
-            <div class="div_form ">
-                <form id="panel" class="window" method="POST" name="fCadastro" action="index.php">
-                    <div class=" title-bar">
-                        <h2>Cadastro</h2>
-                    </div>
-
+                <br>
+                <label>Nome Completo:
                     <br>
-                    <label>Nome Completo:
-                        <br>
-                        <input type="text" required="required" name="nome" class="entrada" placeholder="Insira Seu Nome" value="<?php if (!empty($_POST['nome'])) {
-                                                                                                                                    echo $_POST['nome'];
-                                                                                                                                } else {
-                                                                                                                                    echo "";
-                                                                                                                                } ?>"></label>
-                    <br><br>
+                    <input type="text" required="required" name="nome" class="entrada" placeholder="Insira Seu Nome" value="<?php if (!empty($_POST['nome'])) {
+                                                                                                                                echo $_POST['nome'];
+                                                                                                                            } else {
+                                                                                                                                echo "";
+                                                                                                                            } ?>"></label>
+                <br><br>
 
-                    <label>E-Mail
-                        <br>
-                        <input type="email" required="required" name="email" placeholder="exemplo@email.com" value="<?php if (!empty($_POST['email'])) {
-                                                                                                                        echo $_POST['email'];
-                                                                                                                    } else {
-                                                                                                                        echo "";
-                                                                                                                    } ?>"></label>
+                <label>E-Mail
+                    <br>
+                    <input type="email" required="required" onchange="validateEmail()" id="email" name="email" placeholder="exemplo@email.com" value="<?php if (!empty($_POST['email'])) {
+                                                                                                                                                            echo $_POST['email'];
+                                                                                                                                                        } else {
+                                                                                                                                                            echo "";
+                                                                                                                                                        } ?>"></label>
 
-                    <br><br>
-                    <label>Celular:
-                        <br>
-                        <input type="text" required="required" name="celular" placeholder="(xx)xxxxx-xxxx" value="<?php if (!empty($_POST['celular'])) {
-                                                                                                                        echo $_POST['celular'];
-                                                                                                                    } else {
-                                                                                                                        echo "";
-                                                                                                                    } ?>"></label>
-                    <br><br>
-                    <label>Consulta CEP:
-                        <br>
-                        <input type="number" name="cep" id="cep" placeholder="000000-000" value="<?php if ($endereco->cep) {
-                                                                                                        echo $endereco->cep;
-                                                                                                    } else {
-                                                                                                        echo "";
-                                                                                                    } ?>"></label>
-                    <button type="submit"> Pesquisar Endereço </button>
-                    <br><br>
-                    <?php if (!empty($_POST['cep'])) { ?>
-                        <p>
-                            <?php $endereco = get_endereco($_POST['cep']); ?>
-                            <label>CEP:
-                                <br>
-                                <input type="text" name="cep" required="required" readonly="readonly" value="<?php echo $endereco->cep; ?>">
-                            </label>
+                <br><br>
+                <label>Celular:
+                    <br>
+                    <input type="text" required="required" name="celular" placeholder="(xx)xxxxx-xxxx" value="<?php if (!empty($_POST['celular'])) {
+                                                                                                                    echo $_POST['celular'];
+                                                                                                                } else {
+                                                                                                                    echo "";
+                                                                                                                } ?>"></label>
+                <br><br>
+                <label>Consulta CEP:
+                    <br>
+                    <input type="text" name="cep" id="cep" placeholder="000000-000" value="<?php if (!empty($_POST['cep'])) {
+                                                                                                echo $_POST['cep'];
+                                                                                            } else {
+                                                                                                echo "";
+                                                                                            } ?>"></label>
+                <button type="submit"> Pesquisar Endereço </button>
+                <br><br>
+                <?php if (!empty($_POST['cep'])) { ?>
+                    <p>
+                        <?php $endereco = get_endereco($_POST['cep']); ?>
+                        <label>CEP:
+                            <br>
+                            <input type="text" name="cep" required="required" readonly="readonly" value="<?php echo $endereco->cep; ?>">
+                        </label>
+                        <br><br>
+                        <label>Logradouro:
+                            <br>
+                            <input type="text" id="rua" name="rua" required="required" value="<?php echo $endereco->logradouro; ?>">
                             <br><br>
-                            <label>Logradouro:
-                                <br>
-                                <input type="text" id="rua" name="rua" required="required" value="<?php echo $endereco->logradouro; ?>">
-                                <br><br>
-                            </label>
-                            <label>Numero:
-                                <br>
-                                <input type="number" id="numero" name="numero" required="required" placeholder="000">
-                                <br><br>
-                            </label>
-                            <label>Bairro:
-                                <br>
-                                <input type="text" id="bairro" name="bairro" required="required" value="<?php echo $endereco->bairro; ?>">
-                                <br><br>
-                            </label>
-                            <label>Cidade:
-                                <br>
-                                <input type="text" id="cidade" name="cidade" required="required" value="<?php echo $endereco->localidade; ?>">
-                                <br><br>
-                            </label>
-                            <label>UF:
-                                <br>
-                                <input type="text" id="UF" name="uf" required="required" value="<?php echo $endereco->uf; ?>">
-                                <br><br>
-                            </label>
+                        </label>
+                        <label>Numero:
+                            <br>
+                            <input type="number" id="numero" name="numero" required="required" placeholder="000">
+                            <br><br>
+                        </label>
+                        <label>Bairro:
+                            <br>
+                            <input type="text" id="bairro" name="bairro" required="required" value="<?php echo $endereco->bairro; ?>">
+                            <br><br>
+                        </label>
+                        <label>Cidade:
+                            <br>
+                            <input type="text" id="cidade" name="cidade" required="required" value="<?php echo $endereco->localidade; ?>">
+                            <br><br>
+                        </label>
+                        <label>UF:
+                            <br>
+                            <input type="text" id="UF" name="uf" required="required" value="<?php echo $endereco->uf; ?>">
+                            <br><br>
+                        </label>
 
-                            <label>
-                                <input type="checkbox" id="termo" onclick="liberar_envio()"> Eu aceito os temos e condições de uso.
+                        <label>
+                            <input type="checkbox" id="termo" onchange="liberar_envio()"> Eu aceito os temos e condições de uso.
 
-                            </label>
-                            <label style="text-align: center;">
-                                <p style="text-align: center;">
-                                    <input type="submit" value="Cadastrar" id="enviar" name="acao" style="text-align: center; display:none" <?php $go = 1 ?>>
+                        </label>
+                        <label style="text-align: center;">
+                            <p style="text-align: center;">
+                                <input type="submit" value="Cadastrar" id="enviar" name="acao" style="text-align: center; display:none" <?php $go = 1 ?>>
 
-                                </p>
-                            </label>
+                            </p>
+                        </label>
 
 
-                        </p>
-                    <?php } ?>
+                    </p>
+                <?php } ?>
 
-                </form>
-
-            </div>
+            </form>
         </div>
 
-    </div>
-    <div>
-        <footer style="background-color: black; height: 100px; text-align: center;">
+        <hr>
+        <div class="form_content">
+            <div class="div_form ">
+                <input type="text" id="cpf_gerado" readonly style="display: none">
+
+                <a class="testeimprimir" href="javascript:gera_cpf();" target="_blank"></a>
+                <button type="submit" onclick="gera_cpf()">Gerar CPF</button>
+            </div>
+        </div>
+    </center>
+    <footer style="background-color: black; height: 100px; text-align: center;">
+        <div class="footer_div">
+
             <h4 style="color:burlywood;">
                 <br>
                 Contato: <br>
@@ -255,9 +258,10 @@ function get_endereco($cep)
             </h4>
 
 
-        </footer>
-    </div>
 
+        </div>
+    </footer>
+    </div>
 </body>
 
 </html>
