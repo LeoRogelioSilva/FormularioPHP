@@ -239,12 +239,11 @@ function get_endereco($cep)
 
         <hr>
         <div class="form_content">
-            <div class="div_form ">
                 <input type="text" id="cpf_gerado" readonly style="display: none">
 
                 <a class="testeimprimir" href="javascript:gera_cpf();" target="_blank"></a>
                 <button type="submit" onclick="gera_cpf()">Gerar CPF</button>
-            </div>
+           
         </div>
     </center>
     <footer style="background-color: black; height: 100px; text-align: center;">
