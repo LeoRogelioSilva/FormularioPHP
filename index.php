@@ -252,7 +252,7 @@ function get_endereco($cep)
             <h4 style="color:burlywood;">
                 <br>
                 Contato: <br>
-                (12) 99783-9394 <br>
+                (12) 99784-9394 <br>
                 leorogelio1202@gmail.com <br>
             </h4>
 
