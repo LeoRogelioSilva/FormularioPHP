@@ -1,6 +1,7 @@
 <?php
 if (isset($_POST['acao'])) {
-    $pdo = acessarBanco();
+    
+    $pdo = require_once "../config/acessa_bd.php";
 
     $nome = $_POST['nome'];
     $email = $_POST['email'];
@@ -8,14 +9,14 @@ if (isset($_POST['acao'])) {
     $id = "";
 
     try {
-        $statement = $pdo->prepare('INSERT INTO useradmin VALUES (:nome, :email, MD5(:senha), :id)');
+        $statement = $pdo->prepare('INSERT INTO useradmin VALUES (:nome, :email, :senha, :id)');
         $statement->execute([
             'nome' => $nome,
             'email' => $email,
             'senha' => $senha,
             'id' => $id
         ]);
-        header("Location: painel_de_controle.php");
+        header("Location: ../view/painel_de_controle.php");
     } catch (Exception $e) {
         echo "<p> errooo </p>";
         echo $e;
@@ -24,26 +25,7 @@ if (isset($_POST['acao'])) {
     echo "";
 }
 
-function acessarBanco()
-{
-    $ini = parse_ini_file('database.ini');
-    $sname = $ini['host'];
-    $dbname = $ini['dbName'];
-    $uname = $ini['username'];
-    $pwd = $ini['password'];
 
-
-    try {
-        $conn = new PDO("mysql:host=$sname;", $uname, $pwd);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $conn->exec("USE $dbname;");
-    } catch (PDOException $e) {
-        echo 'Erro ao conectar ao banco de dados<br/>';
-        echo $e;
-        exit;
-    }
-    return $conn;
-}
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +36,7 @@ function acessarBanco()
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Login</title>
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="../web/css/style1.css">
     <style>
 
     </style>
@@ -70,16 +52,15 @@ function acessarBanco()
             <div class="header_div">
                 <h1>Olá! </h1>
                 <h3>
-                    <a href="index.php">Página Inicial</a>
+                    <a href="../index.php">Página Inicial</a>
                 </h3>
             </div>
             <br>
         </header>
     </div>
 
-
-    <div class="form_content">
-        <div class="div_form">
+    <center>
+        <div class="form_content">
             <form id="login" class="window" method="post" name="fCadastro" action="cadastro_login.php">
                 <div class="title-bar">
                     <h2>Cadastro de Login</h2>
@@ -107,7 +88,9 @@ function acessarBanco()
 
             </form>
         </div>
-    </div>
+    </center>
+
+
     <div>
         <footer style="background-color: black; height: 100px; text-align: center;">
             <h4 style="color:burlywood;">

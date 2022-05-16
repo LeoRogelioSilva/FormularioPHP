@@ -1,7 +1,3 @@
-$("#btnCep").on("click", function(){
-    
-});
-
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -16,12 +12,7 @@ function liberar_envio() {
     }
 };
 
-function validateEmail() {
-    var re = /\S+@\S+\.\S+/;
-    if (!re.test(document.getElementById("email"))) {
-        alert("Email invalidod");
-    }
-};
+
 
 function gera_cpf() {
     var number_cpf = [];

@@ -2,14 +2,14 @@
 
 use function PHPSTORM_META\type;
 
-$conn = require_once "../config/acessa_bd.php";
+$conn = require "../config/acessa_bd.php";
 
 
 $nome = $celular = $email = $cep = $rua = $numero = $bairro = $cidade = $uf = $id = "";
 $noData = 0;
 
 
-if (isset($_POST['acao'])) {
+if (!empty($_POST['acao'])) {
     $pdo = acessarBanco();
     $nome = $_POST['nome'];
     $celular = $_POST['celular'];
@@ -79,7 +79,7 @@ function get_endereco($cep)
                 <br>
                 <h1>Olá </h1>
                 <h3>
-                    <a href="login.php" style="color:burlywood;">Login</a>
+                    <a href="../util/login.php" style="color:burlywood;">Login</a>
                 </h3>
                 <br>
 
@@ -105,7 +105,7 @@ function get_endereco($cep)
 
                 <label>E-Mail
                     <br>
-                    <input type="email" required="required" onchange="validateEmail()" id="email" name="email" placeholder="exemplo@email.com" value="<?php if (!empty($_POST['email'])) {
+                    <input type="email" required="required" id="email" name="email" placeholder="exemplo@email.com" value="<?php if (!empty($_POST['email'])) {
                                                                                                                                                             echo $_POST['email'];
                                                                                                                                                         } else {
                                                                                                                                                             echo "";

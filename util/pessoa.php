@@ -62,7 +62,6 @@ class Pessoa{
         $statement = $conexao->prepare('INSERT INTO userdata VALUES (?,?,?,?,?,?,?,?,?,?)');
         $statement->bind_param('sisisissss', $this->nome,$this->celular,$this->email,$this->cep,$this->rua,$this->numero,$this->bairro, $this->cidade, $this->uf, $this->id);
         $statement->execute();
-        $statement->close();
     }
 
 

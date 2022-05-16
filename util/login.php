@@ -36,7 +36,7 @@ if (isset($_POST['email'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="../web/css/style1.css">
     <title>Login</title>
     <script>
     </script>
@@ -58,10 +58,8 @@ if (isset($_POST['email'])) {
         </header>
     </div>
 
-
-
-    <div class="form_content">
-        <div class="div_form ">
+    <center>
+        <div class="form_content">
             <form id="login" class="window" method="POST" name="fCadastro" action="login.php">
                 <div class="title-bar">
                     <h2>Login</h2>
@@ -83,14 +81,15 @@ if (isset($_POST['email'])) {
 
             </form>
 
-        </div>
-        <div>
+
             <h2>
                 Não tem cadastro?
             </h2>
-            <a href="cadastro_login.php"> Cadastrar </a>
+            
+            <a href="cadastro_login.php"> <button> Cadastrar </button></a>
+
         </div>
-    </div>
+    </center>
     <footer style="background-color: black; height: 100px; text-align: center;">
         <h4 style="color:burlywood;">
             <br>

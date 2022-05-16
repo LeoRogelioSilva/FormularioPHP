@@ -20,7 +20,7 @@ a{
   opacity: 0.6;
   height: 130px;
   text-align: center;
-  position:relative;
+  position:fixed;
 }
 
 
@@ -102,7 +102,22 @@ input[type=submit] {
   cursor: pointer;
 }
 
+button{
+  width: 50%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 input[type=submit]:hover {
+  background-color: burlywood;
+}
+
+button:hover{
   background-color: burlywood;
 }
 
