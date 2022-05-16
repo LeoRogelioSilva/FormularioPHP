@@ -2,7 +2,7 @@
 
 use function PHPSTORM_META\type;
 
-$conn = require_once "acessa_bd.php";
+$conn = require_once "../config/acessa_bd.php";
 
 
 $nome = $celular = $email = $cep = $rua = $numero = $bairro = $cidade = $uf = $id = "";
@@ -63,52 +63,11 @@ function get_endereco($cep)
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="../web/css/style1.css">
     <title>Formulário</title>
 
     <script>
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min)) + min;
-        }
-
-        function liberar_envio() {
-            if (document.getElementById("termo").checked == true) {
-                document.getElementById("enviar").style.display = "inline";
-            } else {
-                document.getElementById("enviar").style.display = "none";
-            }
-        };
-
-        function validateEmail() {
-            var re = /\S+@\S+\.\S+/;
-            if (!re.test(document.getElementById("email"))) {
-                alert("Email invalidod");
-            }
-        };
-
-        function gera_cpf() {
-            var number_cpf = [];
-            var soma = 0;
-            var cpf = "";
-            for (let i = 0; i < 9; i++) {
-                number_cpf[i] = getRandomInt(0, 9);
-                soma += (i + 1) * number_cpf[i];
-            }
-            number_cpf[9] = soma % 11 == 10 ? 9 : soma % 11;
-            soma = 0;
-            for (let i = 0; i <= 9; i++) {
-                soma += (i) * number_cpf[i];
-            }
-            number_cpf[10] = soma % 11 == 10 ? 9 : soma % 11;
-            for (let i = 0; i < 11; i++) {
-                cpf += String(number_cpf[i]);
-            }
-            document.getElementById("cpf_gerado").style.display = "inline";
-            document.getElementById("cpf_gerado").value = cpf;
-
-        }
+        
     </script>
 </head>
 
@@ -129,7 +88,7 @@ function get_endereco($cep)
     <center>
 
         <div class="div_form ">
-            <form id="panel" class="window" method="POST" name="fCadastro" action="index.php">
+            <form id="panel" class="window" method="POST" name="fCadastro" action="pagina_inicial.php">
                 <div class=" title-bar">
                     <h2>Cadastro</h2>
                 </div>
@@ -168,7 +127,7 @@ function get_endereco($cep)
                                                                                             } else {
                                                                                                 echo "";
                                                                                             } ?>"></label>
-                <button type="submit" id="btnCep"> Pesquisar Endereço </button>
+                <button type="submit"> Pesquisar Endereço </button>
                 <br><br>
                 <?php if (!empty($_POST['cep'])) { ?>
                     <p>
@@ -245,6 +204,8 @@ function get_endereco($cep)
 
         </div>
     </footer>
+
+    <script src="../web/js/controle.js"></script>
 </body>
 
 </html>

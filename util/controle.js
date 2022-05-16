@@ -1,3 +1,0 @@
-$("#btnCep").on("click", function(){
-    
-});
