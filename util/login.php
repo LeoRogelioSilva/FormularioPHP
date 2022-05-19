@@ -1,12 +1,17 @@
 <?php
-
 if (isset($_POST['email'])) {
     $email = $_POST['email'];
     if (isset($_POST['senha'])) {
         $senha = md5($_POST['senha']);
+        
+        $ini = parse_ini_file('../config/database.ini');
+        $sname = $ini['host'];
+        $dbname = $ini['dbName'];
+        $uname = $ini['username'];
+        $pwd = $ini['password'];
 
-        $conexao = mysqli_connect("sql300.epizy.com", "epiz_31397704", "Leoo1202", "epiz_31397704_bdform");
-        if (mysqli_connect_errno($conexao)) {
+        $conexao = mysqli_connect($sname,   $uname, $pwd, $dbname);
+        if (mysqli_connect_errno()) {
             echo "Problemas na Conexão Erro:";
             echo mysqli_connect_errno();
             die();
@@ -21,7 +26,7 @@ if (isset($_POST['email'])) {
             session_start();
             $_SESSION["email"] = $email;
             $_SESSION["senha"] = $senha;
-            header("Location: painel_de_controle.php");
+            header("Location: ../view/painel_de_controle.php");
         }
         mysqli_close($conexao);
     }
@@ -51,7 +56,7 @@ if (isset($_POST['email'])) {
             <div class="header_div">
                 <h1>Olá Admin! </h1>
                 <h3>
-                    <a href="index.php">Página Inicial</a>
+                    <a href="../index.php">Página Inicial</a>
                 </h3>
             </div>
             <br>

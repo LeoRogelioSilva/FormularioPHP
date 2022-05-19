@@ -1,7 +1,9 @@
 <?php
+
 if (isset($_POST['acao'])) {
     
-    $pdo = require_once "../config/acessa_bd.php";
+    require "../config/acessa_bd.php";
+    $pdo = acessarBanco();
 
     $nome = $_POST['nome'];
     $email = $_POST['email'];
@@ -13,7 +15,7 @@ if (isset($_POST['acao'])) {
         $statement->execute([
             'nome' => $nome,
             'email' => $email,
-            'senha' => $senha,
+            'senha' => md5($senha),
             'id' => $id
         ]);
         header("Location: ../view/painel_de_controle.php");
