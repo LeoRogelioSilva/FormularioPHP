@@ -1,5 +1,34 @@
 <?php
 require "../config/acessa_bd.php";
+session_start();
+$email = $_SESSION["email"];
+$senha = $_SESSION["senha"];
+
+$ini = parse_ini_file('../config/database.ini');
+$sname = $ini['host'];
+$dbname = $ini['dbName'];
+$uname = $ini['username'];
+$pwd = $ini['password'];
+
+$conexao = mysqli_connect($sname,   $uname, $pwd, $dbname);
+if (mysqli_connect_errno()) {
+    echo "Problemas na Conexão Erro:";
+    echo mysqli_connect_errno();
+    die();
+}
+$query = ("select * from useradmin where email='$email' and senha='$senha'");
+$resultado = mysqli_query($conexao, $query);
+$linhas = mysqli_num_rows($resultado);
+if ($linhas == 0) {
+    echo "Usuário não encontrado!";
+    unset($_SESSION['email']);
+} else if ($linhas == 1) {
+    while ($row = $resultado->fetch_array()) {
+        $id = $row['id'];
+        $nome = $row['nome'];
+    }
+}
+
 
 use function PHPSTORM_META\type;
 
@@ -60,14 +89,14 @@ use function PHPSTORM_META\type;
 
 <body style="background-color: #f2f2f2;">
 
-<header>
+    <header>
         <div class="container" style="text-align: center;">
             <div class="header_div">
 
                 <br>
                 <h1>Painel de Controle </h1>
                 <h3>
-                    <a href="../util/login.php" style="color:burlywood;">Login</a>
+                    <a href="../util/logout.php" style="color:burlywood;">Logout</a>
                 </h3>
                 <br>
 
@@ -203,6 +232,11 @@ use function PHPSTORM_META\type;
                         }
                         echo "</tr>";
                     }
+                    date_default_timezone_set('America/Sao_Paulo');
+                    $data = date("Y-m-d h:i:s");
+                    $action = "Busca";
+                    $query = ("insert into historico values ('$nome','$data', '$action', '$id')");
+                    $resultado = mysqli_query($conexao, $query);
                     //header("Location: painel_de_controle.php");
                 } catch (Exception $e) {
                     echo "<p> errooo </p>";
@@ -277,6 +311,7 @@ use function PHPSTORM_META\type;
                         echo "<td>$campo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
                     }
                     echo "</tr>";
+                   
                 }
                 //header("Location: painel_de_controle.php");
             } catch (Exception $e) {

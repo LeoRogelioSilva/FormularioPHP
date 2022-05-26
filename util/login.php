@@ -3,7 +3,7 @@ if (isset($_POST['email'])) {
     $email = $_POST['email'];
     if (isset($_POST['senha'])) {
         $senha = md5($_POST['senha']);
-        
+
         $ini = parse_ini_file('../config/database.ini');
         $sname = $ini['host'];
         $dbname = $ini['dbName'];
@@ -22,10 +22,20 @@ if (isset($_POST['email'])) {
         if ($linhas == 0) {
             echo "Usuário não encontrado!";
             unset($_SESSION['email']);
-        } else {
+        } else if($linhas ==1){
+            while($row = $resultado->fetch_array()){
+                $id=$row['id'];
+                $nome=$row['nome'];
+            }
             session_start();
             $_SESSION["email"] = $email;
             $_SESSION["senha"] = $senha;
+            date_default_timezone_set('America/Sao_Paulo');
+            $data=date("Y-m-d h:i:s");
+            echo $data;
+            $action = "Login";
+            $query = ("insert into historico values ('$nome','$data', '$action', '$id')");
+            $resultado = mysqli_query($conexao, $query);
             header("Location: ../view/painel_de_controle.php");
         }
         mysqli_close($conexao);
@@ -90,7 +100,7 @@ if (isset($_POST['email'])) {
             <h2>
                 Não tem cadastro?
             </h2>
-            
+
             <a href="cadastro_login.php"> <button> Cadastrar </button></a>
 
         </div>
