@@ -189,6 +189,10 @@ function get_endereco($cep)
             <button type="submit" onclick="gera_cpf()">Gerar CPF</button>
 
         </div>
+        <div>
+            <input type="text" id="textoCopiar">
+            <button id="teste" onclick="copiarTexto()">copiar</button>
+        </div>
     </center>
     <footer style="background-color: black; height: 100px; text-align: center;">
         <div class="footer_div">

@@ -33,5 +33,12 @@ function gera_cpf() {
     }
     document.getElementById("cpf_gerado").style.display = "inline";
     document.getElementById("cpf_gerado").value = cpf;
+}
 
+function copiarTexto(){
+    var texto = document.getElementById('textoCopiar')
+    console.log(texto)
+    texto.select()
+    document.execCommand('copy')
+    alert("copiado")
 }
