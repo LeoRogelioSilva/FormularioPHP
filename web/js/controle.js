@@ -37,8 +37,11 @@ function gera_cpf() {
 
 function copiarTexto(){
     var texto = document.getElementById('textoCopiar')
-    console.log(texto)
-    texto.select()
-    document.execCommand('copy')
-    alert("copiado")
+    console.log(texto);
+    x = texto.value.replace(/\D/g,'');
+    texto.value = x;
+    console.log(texto);
+    texto.select();
+    document.execCommand('copy');
+    alert("copiado");
 }
