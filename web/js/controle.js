@@ -43,5 +43,4 @@ function copiarTexto(){
     console.log(texto);
     texto.select();
     document.execCommand('copy');
-    alert("copiado");
 }
