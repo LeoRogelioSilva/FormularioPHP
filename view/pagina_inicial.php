@@ -189,24 +189,19 @@ function get_endereco($cep)
             <button type="submit" onclick="gera_cpf()">Gerar CPF</button>
 
         </div>
+        <hr>
         <div>
             <input type="text" id="textoCopiar">
             <button id="teste" onclick="copiarTexto()">copiar</button>
         </div>
     </center>
-    <footer style="background-color: black; height: 100px; text-align: center;">
-        <div class="footer_div">
-
-            <h4 style="color:burlywood;">
+    <footer style="background-color: gray; height: 100px; text-align: center;">
+            <h4 style="color: white;">
                 <br>
                 Contato: <br>
                 (12) 99784-9394 <br>
                 leorogelio1202@gmail.com <br>
             </h4>
-
-
-
-        </div>
     </footer>
 
     <script src="../web/js/controle.js"></script>
